@@ -1,0 +1,80 @@
+/**
+ * DataType
+ *
+ * @Enum {string}
+ */
+export const DataType = Object.freeze({
+  FUNCTION: "function",
+  STRING: "string",
+  OBJECT: "object",
+  ARRAY: "array",
+  NUMBER: "number",
+  BOOLEAN: "boolean",
+  UNDEFINED: "undefined",
+  NULL: "null",
+});
+
+/**
+ * Tag Names
+ *
+ * @enum {string}
+ */
+export const TagName = Object.freeze({
+  A: "a",
+  ALL: "*",
+  AUDIO: "audio",
+  B: "b",
+  BLOCKQUOTE: "blockquote",
+  BR: "br",
+  BUTTON: "button",
+  CODE: "code",
+  DEL: "del",
+  DIV: "div",
+  EDITOR: "vanle-editor",
+  EM: "em",
+  FIELDSET: "fieldset",
+  FIGCAPTION: "figcaption",
+  FIGURE: "figure",
+  FORM: "form",
+  H1: "h1",
+  H2: "h2",
+  H3: "h3",
+  H4: "h4",
+  H5: "h5",
+  H6: "h6",
+  HR: "hr",
+  I: "i",
+  IFRAME: "iframe",
+  IMG: "img",
+  INPUT: "input",
+  INS: "ins",
+  LABEL: "label",
+  LEGEND: "legend",
+  LI: "li",
+  MARK: "mark",
+  OL: "ol",
+  OPTION: "option",
+  P: "p",
+  PRE: "pre",
+  TEXTAREA: "editor-textarea",
+  S: "s",
+  SECTION: "section",
+  SELECT: "select",
+  SMALL: "small",
+  SPAN: "span",
+  STRONG: "strong",
+  SUB: "sub",
+  SUMMARY: "summary",
+  SUP: "sup",
+  TABLE: "table",
+  TBODY: "tbody",
+  TD: "td",
+  TFOOT: "tfoot",
+  TH: "th",
+  THEAD: "thead",
+  TOOLBAR: "editor-toolbar",
+  TR: "tr",
+  U: "u",
+  UL: "ul",
+  VIDEO: "video",
+});

@@ -1,6 +1,6 @@
 # vanilla-lexical-editor
 
-An extensible vanilla web text-editor based on Lexical
+An extensible web text-editor based on Lexical
 
 ## License
 

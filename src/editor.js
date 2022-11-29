@@ -2,10 +2,17 @@ import {
   createEditor,
   $getRoot,
   $getSelection,
+  $isRangeSelection,
   $createParagraphNode,
   $createTextNode,
 } from "lexical";
-import { $createHeadingNode, $createQuoteNode, HeadingNode, QuoteNode } from "@lexical/rich-text";
+import {
+  $createHeadingNode,
+  $createQuoteNode,
+  registerRichText,
+  HeadingNode,
+  QuoteNode,
+} from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
 import { $createListItemNode, $createListNode, ListItemNode, ListNode } from "@lexical/list";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
@@ -182,49 +189,8 @@ export default class Editor {
 
     // Set rootElement
     this.engine.setRootElement(this.textarea);
-  }
 
-  // InitEditor
-  initEditor(editor, initEditorState) {
-    if (initEditorState === null) {
-      return;
-    } else if (initEditorState === undefined) {
-      editor.update(() => {
-        const root = $getRoot();
-        if (root.isEmpty()) {
-          const paragraph = $createParagraphNode();
-          root.append(paragraph);
-          const activeElement = document.activeElement;
-          if (
-            $getSelection() !== null ||
-            (activeElement !== null && activeElement === editor.getRootElement())
-          ) {
-            paragraph.select();
-          }
-        }
-      }, HISTORY_MERGE_OPTIONS);
-    } else if (initEditorState !== null) {
-      switch (typeof initEditorState) {
-        case "string": {
-          const parsedEditorState = editor.parseEditorState(initEditorState);
-          editor.setEditorState(parsedEditorState, HISTORY_MERGE_OPTIONS);
-          break;
-        }
-        case "object": {
-          editor.setEditorState(initEditorState, HISTORY_MERGE_OPTIONS);
-          break;
-        }
-        case "function": {
-          editor.update(() => {
-            const root = $getRoot();
-            if (root.isEmpty()) {
-              initEditorState(editor);
-            }
-          }, HISTORY_MERGE_OPTIONS);
-          break;
-        }
-      }
-    }
+    registerRichText(this.engine);
   }
 
   // Init plugins

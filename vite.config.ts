@@ -22,6 +22,11 @@ const fileName = {
 
 module.exports = defineConfig({
   base: "./",
+  server: {
+    port: 3000,
+    https: false,
+    open: true,
+  },
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),

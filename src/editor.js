@@ -1,11 +1,4 @@
-import {
-  createEditor,
-  $getRoot,
-  $getSelection,
-  $isRangeSelection,
-  $createParagraphNode,
-  $createTextNode,
-} from "lexical";
+import { createEditor, $getRoot, $createParagraphNode, $createTextNode } from "lexical";
 import {
   $createHeadingNode,
   $createQuoteNode,
@@ -22,11 +15,8 @@ import { HashtagNode } from "@lexical/hashtag";
 import Dom from "./helper/Dom";
 import { TagName } from "./helper/Enum";
 
+import plugins from "./plugins";
 import theme from "./theme";
-
-const HISTORY_MERGE_OPTIONS = {
-  tag: "history-merge",
-};
 
 /**
  * Core Editor
@@ -101,12 +91,12 @@ export default class Editor {
    *
    * @type {Map<string, Plugin>}
    */
-  #plugins = new Map();
+  #plugins = new Set();
 
   /**
    * Allows read access to plugin manager
    *
-   * @return {PluginManager}
+   * @return {Plugin}
    */
   get plugins() {
     return this.#plugins;
@@ -140,22 +130,25 @@ export default class Editor {
     orig.appendChild(this.container);
 
     // Toolbar
-    this.#toolbar = this.dom.createElement(TagName.TOOLBAR);
+    this.#toolbar = this.dom.createElement(TagName.TOOLBAR, { attributes: { role: "toolbar" } });
     this.container.appendChild(this.toolbar);
 
     // Textarea
-    // this.#textarea = this.dom.createElement(TagName.TEXTAREA, {
-    //   attributes: {
-    //     contentEditable: true,
-    //   },
-    // });
-    this.#textarea = this.dom.createElement(TagName.DIV, {
-      attributes: {
-        class: "editor-textarea",
-        contentEditable: true,
-      },
-    });
+    this.#textarea = this.dom.createElement(TagName.TEXTAREA);
+    this.textarea.appendChild(
+      this.dom.createElement(TagName.DIV, {
+        attributes: {
+          contentEditable: true,
+          class: "textarea-inner",
+        },
+      }),
+    );
     this.container.appendChild(this.textarea);
+
+    // Plugins
+    (plugins || []).forEach((plugin) => {
+      this.plugins.add(plugin);
+    });
 
     // Config
     const { editable: initEditable, inittheme: initTheme, initNameSpace, editorState } = config;
@@ -181,44 +174,31 @@ export default class Editor {
         LinkNode,
         HashtagNode,
       ],
-      // editorState: editorState || prePopulatedRichText,
+      // editorState: editorState,
     };
 
     // Engine
     this.engine = createEditor(this.config);
 
     // Set rootElement
-    this.engine.setRootElement(this.textarea);
+    this.engine.setRootElement(this.textarea.firstChild);
 
+    // Register richTex
     registerRichText(this.engine);
   }
 
-  // Init plugins
-  initPlugins() {
-    // default plugins
-    const builtin = this.constructor.defaultPlugins || [];
-
-    const pluginsSet = new Set();
-
-    builtin.forEach((plugin) => {
-      pluginsSet.add(plugin);
+  // Init
+  init() {
+    // Init plugins
+    this.plugins.forEach((plugin) => {
+      const pluginInst = new plugin(this);
+      pluginInst.init();
     });
 
-    pluginsSet.forEach((plugin) => {
-      this.plugins.set(plugin.name, new plugin(this));
-    });
-
-    this.plugins.forEach((plugin) => plugin.init());
-  }
-
-  // update
-  update() {
-    // Inside the `editor.update` you can use special $ prefixed helper functions.
-    // These functions cannot be used outside the closure, and will error if you try.
+    // Init content
     this.engine.update(() => {
       // Get the RootNode from the EditorState
       const root = $getRoot();
-
       if (root.getFirstChild() === null) {
         const heading = $createHeadingNode("h1");
         heading.append($createTextNode("Welcome to the playground"));
@@ -299,9 +279,7 @@ export default class Editor {
   // Create
   static create(element, config = {}) {
     const editor = new this(element, config);
-
-    editor.initPlugins();
-    editor.update();
+    editor.init();
 
     return editor;
   }

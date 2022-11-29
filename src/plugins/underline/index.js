@@ -1,14 +1,14 @@
 import ToolbarPlugin from "../../constructor/ToolbarPlugins";
 
 /**
- * Bold Plugin
+ * Underline Plugin
  */
-export default class Bold extends ToolbarPlugin {
+export default class Underline extends ToolbarPlugin {
   /**
    * @inheritDoc
    */
   static get name() {
-    return "bold";
+    return "underline";
   }
 
   /**
@@ -16,7 +16,7 @@ export default class Bold extends ToolbarPlugin {
    */
   init() {
     this.newToolbarItem({
-      label: "Bold",
+      label: "Underline",
       command: this.constructor.name,
       className: "toolbar-item",
     });

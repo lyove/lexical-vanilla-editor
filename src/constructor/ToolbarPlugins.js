@@ -2,8 +2,6 @@ import {
   $getSelection,
   $isRangeSelection,
   $isRootOrShadowRoot,
-  COMMAND_PRIORITY_CRITICAL,
-  SELECTION_CHANGE_COMMAND,
   FORMAT_TEXT_COMMAND,
 } from "lexical";
 
@@ -31,16 +29,6 @@ export default class ToolbarPlugin {
     return this.#editor;
   }
 
-  #activeEditor;
-
-  get activeEditor() {
-    return this.#activeEditor;
-  }
-
-  isBold = false;
-
-  isItalic = false;
-
   /**
    * Initializes a new plugin
    *
@@ -48,18 +36,6 @@ export default class ToolbarPlugin {
    */
   constructor(editor) {
     this.#editor = editor;
-
-    this.#activeEditor = editor.engine;
-
-    editor.engine.registerCommand(
-      SELECTION_CHANGE_COMMAND,
-      (_payload, newEditor) => {
-        this.updateToolbar();
-        this.#activeEditor = newEditor;
-        return false;
-      },
-      COMMAND_PRIORITY_CRITICAL,
-    );
   }
 
   /**
@@ -69,11 +45,12 @@ export default class ToolbarPlugin {
    * @param {object} prams
    * @return {void}
    */
-  newToolbarItem({ label, command, uuid }) {
+  newToolbarItem({ label, command, className, uuid }) {
     this.editor.toolbar.appendChild(
       this.#newToolbarButton({
         label,
         command,
+        className,
         uuid,
       }),
     );
@@ -83,36 +60,38 @@ export default class ToolbarPlugin {
    * Create a button
    *
    * @param {object} prams
+   * @param {function} execute
    * @return {HTMLElement}
    */
-  #newToolbarButton({ label, command, uuid }) {
-    const text = `<span class='btn-label'>${label}</span>`;
-    const attributes = {
-      type: "button",
-      "data-command": command,
-      ...(uuid ? { "data-uuid": uuid } : {}),
-    };
-
+  #newToolbarButton({ label, command, className, uuid }) {
     const ButtonItem = this.editor.dom.createElement(TagName.BUTTON, {
-      attributes,
-      class: "toolbar-item spaced",
-      html: `${text}`,
+      attributes: {
+        type: "button",
+        "data-command": command,
+        class: `${className}`,
+        ...(uuid ? { "data-uuid": uuid } : {}),
+      },
+      html: label,
     });
 
     ButtonItem.addEventListener("click", () => {
-      this.#activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, command);
-
-      this.#activeEditor.update(() => {
-        const selection = $getSelection();
-        if ($isRangeSelection(selection)) {
-          console.log(selection);
-        }
-      });
+      this.execute(command);
     });
 
     return ButtonItem;
   }
 
+  /**
+   * Execute
+   */
+  execute(command) {
+    this.editor.engine.dispatchCommand(FORMAT_TEXT_COMMAND, command);
+  }
+
+  /**
+   * Update Toolbar
+   * Todo: WIP
+   */
   updateToolbar() {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
@@ -130,11 +109,9 @@ export default class ToolbarPlugin {
       }
 
       const elementKey = element.getKey();
-      const elementDOM = this.#activeEditor.getElementByKey(elementKey);
+      const elementDOM = this.editor.engine.getElementByKey(elementKey);
 
-      // Update text format
-      this.isBold = selection.hasFormat("bold");
-      this.isItalic = selection.hasFormat("italic");
+      console.log(elementDOM);
     }
   }
 }

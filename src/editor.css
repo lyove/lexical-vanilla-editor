@@ -1,0 +1,59 @@
+vanle-editor {
+  display: block;
+  border: 1px solid rgba(25, 25, 25, 0.2);
+  border-radius: 6px;
+}
+
+editor-toolbar {
+  display: flex;
+  padding: 4px;
+  border-bottom: 1px solid rgba(25, 25, 25, 0.2);
+}
+
+.toolbar-item {
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  outline: 0 none;
+  font-weight: 500;
+  line-height: 1.25rem;
+  padding: 4px 6px;
+  background: none repeat scroll 0 0 transparent;
+}
+
+.toolbar-item:hover {
+  background-color: #f4f5f5;
+  border-radius: 4px;
+}
+
+editor-textarea {
+  display: block;
+}
+
+.textarea-inner {
+  display: block;
+  outline: none;
+  padding: 0.5rem 1rem;
+  overflow: auto;
+}
+
+/**
+ * Format style
+ */
+
+/* underline */
+.editor-text-underline {
+  text-decoration: underline;
+}
+
+/* quote */
+.editor-quote.ltr {
+  margin: 0 0 10px 20px;
+  font-size: 15px;
+  color: #65676b;
+  border-left-color: #ced0d4;
+  border-left-width: 4px;
+  border-left-style: solid;
+  padding-left: 16px;
+}

@@ -1,4 +1,4 @@
-import ToolbarPlugin from "../ToolbarPlugins";
+import ToolbarPlugin from "../../constructor/ToolbarPlugins";
 
 /**
  * Italic Plugin
@@ -16,8 +16,9 @@ export default class Italic extends ToolbarPlugin {
    */
   init() {
     this.newToolbarItem({
-      label: "italic",
+      label: "Italic",
       command: this.constructor.name,
+      className: "toolbar-item",
     });
   }
 }

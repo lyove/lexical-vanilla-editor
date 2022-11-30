@@ -51,34 +51,11 @@ export default class Heading extends ToolbarPlugin {
   }
 
   execute(command) {
-    const formatLargeHeading = () => {
-      this.editor.engine.update(() => {
-        const selection = $getSelection();
-
-        if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createHeadingNode("h1"));
-        }
-      });
-    };
-
-    const formatSmallHeading = () => {
-      this.editor.engine.update(() => {
-        const selection = $getSelection();
-
-        if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createHeadingNode("h2"));
-        }
-      });
-    };
-
-    switch (command) {
-      case "h1":
-        formatLargeHeading();
-        break;
-      case "h2":
-        formatSmallHeading();
-        break;
-      default:
-    }
+    this.editor.engine.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        $wrapNodes(selection, () => $createHeadingNode(command));
+      }
+    });
   }
 }

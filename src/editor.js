@@ -14,7 +14,7 @@ import { HashtagNode } from "@lexical/hashtag";
 
 import Dom from "./helper/Dom";
 import { TagName } from "./helper/Enum";
-
+import Dispatcher from "./constructor/Dispatcher";
 import plugins from "./plugins";
 import theme from "./theme";
 
@@ -120,6 +120,22 @@ export default class Editor {
   }
 
   /**
+   * Event dispatcher of the editor
+   *
+   * @type {Dispatcher}
+   */
+  #editorDispatcher;
+
+  /**
+   * Allows read access to event dispatcher of the editor
+   *
+   * @return {Dispatcher}
+   */
+  get editorDispatcher() {
+    return this.#editorDispatcher;
+  }
+
+  /**
    * Corresponding DOM element of the editor wrapper
    *
    * @type {HTMLElement}
@@ -209,6 +225,7 @@ export default class Editor {
     // Container
     this.#container = this.dom.createElement(TagName.EDITOR);
     orig.appendChild(this.container);
+    // this.#editorDispatcher = new Dispatcher(this.container);
 
     // Toolbar
     this.#toolbar = this.dom.createElement(TagName.TOOLBAR, { attributes: { role: "toolbar" } });

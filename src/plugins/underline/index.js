@@ -15,7 +15,7 @@ export default class Underline extends ToolbarPlugin {
    * Init plugin
    */
   init() {
-    this.newToolbarItem("button", {
+    this.createToolbarItem("button", {
       label: "Underline",
       command: this.constructor.name,
       className: "toolbar-item",

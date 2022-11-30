@@ -15,7 +15,7 @@ export default class Bold extends ToolbarPlugin {
    * Init plugin
    */
   init() {
-    this.newToolbarItem("button", {
+    this.createToolbarItem("button", {
       label: "Bold",
       command: this.constructor.name,
       className: "toolbar-item",

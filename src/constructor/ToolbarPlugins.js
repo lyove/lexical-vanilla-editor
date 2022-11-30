@@ -106,7 +106,7 @@ export default class ToolbarPlugin {
    * @param {object} prams
    * @return {HTMLElement}
    */
-  #createSelect() {
+  #createSelect({ label, command, className, uuid }) {
     const SelectElement = this.editor.dom.createElement(TagName.SELECT, {
       attributes: {
         class: `${className}`,

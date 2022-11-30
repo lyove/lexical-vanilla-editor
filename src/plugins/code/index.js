@@ -15,7 +15,7 @@ export default class Code extends ToolbarPlugin {
    * Init plugin
    */
   init() {
-    this.newToolbarItem(
+    this.createToolbarItem(
       "button", 
       {
         label: "Code",

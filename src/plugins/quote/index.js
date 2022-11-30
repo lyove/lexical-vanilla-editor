@@ -1,4 +1,4 @@
-import { FORMAT_TEXT_COMMAND, $getSelection, $isRangeSelection } from "lexical";
+import { $getSelection, $isRangeSelection } from "lexical";
 import { $createQuoteNode } from "@lexical/rich-text";
 import { $wrapNodes } from "@lexical/selection";
 
@@ -20,7 +20,7 @@ export default class Quote extends ToolbarPlugin {
    */
   init() {
     this.createToolbarItem(
-      "button", 
+      "button",
       {
         label: "Quote",
         command: this.constructor.name,

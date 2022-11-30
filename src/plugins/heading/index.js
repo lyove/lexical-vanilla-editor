@@ -10,7 +10,7 @@ export default class Heading extends ToolbarPlugin {
   /**
    * @inheritDoc
    */
-  static get name() {
+  static get items() {
     return [
       {
         label: "H1",
@@ -45,7 +45,7 @@ export default class Heading extends ToolbarPlugin {
   init() {
     this.createToolbarItem("select", {
       label: "Heading",
-      command: this.constructor.name,
+      command: this.constructor.items,
       className: "toolbar-item",
     });
   }

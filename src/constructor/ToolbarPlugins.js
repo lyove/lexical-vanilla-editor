@@ -8,6 +8,7 @@ import {
 import { $findMatchingParent } from "@lexical/utils";
 
 import { TagName } from "../helper/Enum";
+import { isArray } from "../helper/Utils";
 
 /**
  * ToolbarPlugin
@@ -42,29 +43,47 @@ export default class ToolbarPlugin {
    * Adds a toolbar button
    *
    * @protected
+   * @param {string} type
    * @param {object} prams
    * @return {void}
    */
-  newToolbarItem({ label, command, className, uuid }) {
-    this.editor.toolbar.appendChild(
-      this.#newToolbarButton({
-        label,
-        command,
-        className,
-        uuid,
-      }),
-    );
+  createToolbarItem(type, { label, command, className, uuid }) {
+    switch (type) {
+      case "button":
+        this.editor.toolbar.appendChild(
+          this.#createButton({
+            label,
+            command,
+            className,
+            uuid,
+          }),
+        );
+        break;
+      
+      case "select":
+        this.editor.toolbar.appendChild(
+          this.#createSelect({
+            label,
+            command,
+            className,
+            uuid,
+          }),
+        );
+        break;
+      
+      default:
+    }
+    
   }
 
   /**
-   * Create a button
+   * Create a button element
    *
    * @param {object} prams
-   * @param {function} execute
    * @return {HTMLElement}
    */
-  #newToolbarButton({ label, command, className, uuid }) {
-    const ButtonItem = this.editor.dom.createElement(TagName.BUTTON, {
+  #createButton({ label, command, className, uuid }) {
+    const ButtonElement = this.editor.dom.createElement(TagName.BUTTON, {
       attributes: {
         type: "button",
         "data-command": command,
@@ -74,11 +93,46 @@ export default class ToolbarPlugin {
       html: label,
     });
 
-    ButtonItem.addEventListener("click", () => {
+    ButtonElement.addEventListener("click", () => {
       this.execute(command);
     });
 
-    return ButtonItem;
+    return ButtonElement;
+  }
+
+  /**
+   * Create a select element
+   *
+   * @param {object} prams
+   * @return {HTMLElement}
+   */
+  #createSelect() {
+    const SelectElement = this.editor.dom.createElement(TagName.SELECT, {
+      attributes: {
+        class: `${className}`,
+        ...(uuid ? { "data-uuid": uuid } : {}),
+      },
+      html: label,
+    });
+
+    if (isArray(command)) {
+      command.forEach(item => {
+        const OptionElement = this.editor.dom.createElement(TagName.OPTION, {
+          attributes: {
+            value: item.value,
+          },
+          html: item.label
+        });
+    
+        SelectElement.appendChild(OptionElement);
+      });
+    }
+
+    SelectElement.addEventListener("change", (e) => {
+      this.execute(command);
+    });
+
+    return SelectElement;
   }
 
   /**

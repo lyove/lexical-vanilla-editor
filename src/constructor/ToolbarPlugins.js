@@ -59,7 +59,7 @@ export default class ToolbarPlugin {
           }),
         );
         break;
-      
+
       case "select":
         this.editor.toolbar.appendChild(
           this.#createSelect({
@@ -70,10 +70,9 @@ export default class ToolbarPlugin {
           }),
         );
         break;
-      
+
       default:
     }
-    
   }
 
   /**
@@ -116,20 +115,20 @@ export default class ToolbarPlugin {
     });
 
     if (isArray(command)) {
-      command.forEach(item => {
+      command.forEach((item) => {
         const OptionElement = this.editor.dom.createElement(TagName.OPTION, {
           attributes: {
             value: item.value,
           },
-          html: item.label
+          html: item.label,
         });
-    
+
         SelectElement.appendChild(OptionElement);
       });
     }
 
     SelectElement.addEventListener("change", (e) => {
-      this.execute(command);
+      this.execute(e.target.value);
     });
 
     return SelectElement;

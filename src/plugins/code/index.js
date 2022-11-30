@@ -16,6 +16,7 @@ export default class Code extends ToolbarPlugin {
    */
   init() {
     this.newToolbarItem(
+      "button", 
       {
         label: "Code",
         command: this.constructor.name,

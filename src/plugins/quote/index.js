@@ -19,7 +19,7 @@ export default class Quote extends ToolbarPlugin {
    * Init plugin
    */
   init() {
-    this.newToolbarItem(
+    this.createToolbarItem(
       "button", 
       {
         label: "Quote",

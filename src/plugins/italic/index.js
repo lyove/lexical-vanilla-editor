@@ -15,7 +15,7 @@ export default class Italic extends ToolbarPlugin {
    * Init plugin
    */
   init() {
-    this.newToolbarItem("button", {
+    this.createToolbarItem("button", {
       label: "Italic",
       command: this.constructor.name,
       className: "toolbar-item",
